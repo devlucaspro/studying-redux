@@ -4,8 +4,14 @@ import { router } from './App'
 import { RouterProvider } from 'react-router-dom'
 import './index.css'
 
+import { store } from './redux/store'
+import { Provider } from 'react-redux'
+
+// put around all the application with the Provider passing the store
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 )

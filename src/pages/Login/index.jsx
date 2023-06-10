@@ -1,16 +1,34 @@
 import { useState } from 'react'; 
 import styles from './login.module.css'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+// the action
+import { createUser } from '../../redux/user/slice';
 
 export function Login() {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
 
   function handleLogin(e){
     e.preventDefault()
+
+    if(name === '' || email === '') {
+      alert("Fill in the inputs, type the user's data")
+      return;
+    }
     
-    console.log(name, email)
+    // I dispatch the action function passing the properties
+    dispatch(createUser({
+      name: name,
+      email: email,
+    }))
+
+    navigate('/painel');
   }
 
   return (

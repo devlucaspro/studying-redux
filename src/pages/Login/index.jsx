@@ -8,7 +8,6 @@ import { createUser } from '../../redux/user/slice';
 
 export function Login() {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const [name, setName] = useState('')

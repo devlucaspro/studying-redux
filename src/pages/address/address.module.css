@@ -37,3 +37,12 @@
   padding: 0 14px;
   font-size: 16px;
 }
+
+.btnDelete {
+  margin-left: 16px;
+  background-color: red;
+  color: #fff;
+  padding: 4px;
+  border: none;
+  border-radius: 4px;
+}

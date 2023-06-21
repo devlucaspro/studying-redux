@@ -1,18 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// estado inicial do reducer (user)
+// create a slice
+// initial state
+// create a slice using a name like it: user -> userSlice
+// create reducers for the application
+// export all actions
+// export default the slice as: userSlice.reducer
+// state is the current state's value and action is about what you receive
+
 const initialState = {
-    user: null
+    user: null,
+    users: [],
+    loading: false,
 }
 
-// criar Slice com o nome do reducer (user + Slice)
-// Slice == reducer
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        // going to create an action
-        // payload refers to what we receive
         createUser: (state, action) => {
             console.log(action.payload)
 
@@ -21,18 +26,86 @@ export const userSlice = createSlice({
                 user: {
                     name: action.payload.name,
                     email: action.payload.email,
-                    address: {
-                        location: 'Rua cosmopolis',
-                        number: 194,
-                    },
+                    address: null,
                 }
             }
+        },
+        logoutUser: (state) => {
+
+            return {
+                ...state,
+                user: null,
+            }
+
+        },
+        addAddress: (state, action) => {
+            if(action.payload.location === '' || action.payload.number === '') {
+                alert('preencha')
+                return {...state}
+            }
+
+            if(state.user === null) {
+                alert("Faça o login para cadastrar um endereço")
+                return {...state}
+            }
+
+            console.log({
+                location: action.payload.location,
+                number: action.payload.number
+            })
+
+            alert("Dados atualizados!")
+
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    address: {
+                        location: action.payload.location,
+                        number: action.payload.number,
+                    }
+                }
+            }
+        },
+        deleteAddress: (state) => {
+
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    address: null,
+                }
+            }
+        },
+        fetchUsers: (state, action) => {
+            state.loading = true;
+        },
+        fetchUsersSuccess: (state, action) => {
+            console.log(action.payload);
+
+            state.users = action.payload;
+            state.loading = false;
+
+        },
+        fetchUsersFailure: (state, action) => {
+            console.log("Caiu na Failure")
+            console.log(action.payload);
+            state.loading = false;
+        },
+        fetchUserById: (state) =>  {
+            console.log("Chamou no slice")
+        },
+        fetchUserByIdSuccess: (state, action) => {
+            console.log("User do id");
+            console.log(action.payload);
+        },
+        fetchUserByIdFailure: (state, action) => {
+            console.log("deu erro no fetchById");
         }
     }
 })
 
-// i export it as an action of the current reducer
-export const { createUser } = userSlice.actions;
+export const { createUser, logoutUser, addAddress, deleteAddress,
+fetchUsers, fetchUsersSuccess, fetchUsersFailure, fetchUserById, fetchUserByIdSuccess, fetchUserByIdFailure } = userSlice.actions;
 
-// and i also export the current reducer - it will be userReducer in root-reducer file
 export default userSlice.reducer;

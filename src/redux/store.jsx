@@ -1,32 +1,18 @@
+// create a SagaMiddleware and instance it
+// in store config, set up the property 'middleware' and pass into the instanced const.
+// .run in rootSaga
+
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./root-reducer";
-import { createContext, useContext } from "react";
 
-// configuro a store
+import createSagaMiddleware from 'redux-saga'
+import rootSaga from "./sagas";
+
+const sagaMiddleware = createSagaMiddleware();
+
 export const store = configureStore({
-    reducer: rootReducer
+    reducer: rootReducer,
+    middleware: [sagaMiddleware]
 })
 
-
-// example application with context-api
-
-// const appContext = createContext();
-// export default function ProviderContext(children) {
-//     return(
-//         <appContext.Provider value={{name, email}}>
-//             {children}
-//         </appContext.Provider>
-//     )
-// }
-//
-// const { name, email } = useContext(appContext);
-//
-// // main app
-// <ProviderContext>
-//     //toast
-//     //routes
-// </ProviderContext>
-//
-// // blog
-// const {name} = useContext(appContext)
-// <h1>{name.name}</h1>
+sagaMiddleware.run(rootSaga)

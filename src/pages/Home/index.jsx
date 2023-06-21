@@ -2,15 +2,29 @@ import styles from './home.module.css'
 import { Header } from '../../components/header'
 import { Link } from 'react-router-dom'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { deleteAddress, fetchUserById, fetchUsers } from '../../redux/user/slice'
 
 export function Home() {
-  const { user } = useSelector(rootReducer => rootReducer.user);
+  const { user, users, loading } = useSelector(rootReducer => rootReducer.user);
+  const dispatch = useDispatch();
 
   console.log(user)
-
+  
   function handleDeleteAddress(){
     alert("Endereço deletado com sucesso!")
+
+    dispatch(deleteAddress());
+  }
+
+  function handleFetchUsers() {
+    dispatch(fetchUsers());
+  }
+
+  function handleFetchUserById() {
+    const userID = prompt("Numero do ID")
+
+    dispatch(fetchUserById(userID));
   }
 
   return (
@@ -48,6 +62,22 @@ export function Home() {
             </div>
               </>
             )}
+
+            <hr />
+            <br />
+
+            <h2>Lista de usuários</h2>
+            <button onClick={handleFetchUsers}>Buscar usuários</button>
+            <button onClick={handleFetchUserById}>Buscar usuários com ID</button>
+            <br />
+
+            {loading && <strong>Carregando usuários...</strong>}
+
+            {!loading && users.map((user) => (
+              <div key={user.id}>
+                <p>ID: {user.id} | {user.name}</p>
+              </div>
+            ))}
 
           </div>
 
